@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>焼鳥ノ伝説 - Legendary Yakitori Quest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:wght@200;400;700&family=Space+Grotesk:wght@300;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --flame-gold: #ffa726;
+            --ember-orange: #ff6f00;
+            --charcoal-black: #1a0f0a;
+            --parchment: #f4e8d0;
+            --ancient-bronze: #8b6f47;
+            --smoke-gray: #4a4a4a;
+            --sacred-red: #c62828;
+            --mystical-glow: rgba(255, 167, 38, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', monospace;
+            background: linear-gradient(135deg, var(--charcoal-black) 0%, #2d1810 50%, var(--charcoal-black) 100%);
+            color: var(--parchment);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* RPG風装飾背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 50%, var(--mystical-glow) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(198, 40, 40, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* コンテナ */
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ヒーローセクション */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--flame-gold);
+            box-shadow: 0 5px 20px rgba(255, 167, 38, 0.5);
+        }
+
+        .hero::after {
+            content: '⚔';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.03;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title-frame {
+            border: 4px double var(--flame-gold);
+            padding: 3rem 4rem;
+            background: linear-gradient(135deg, rgba(26, 15, 10, 0.9), rgba(45, 24, 16, 0.95));
+            box-shadow:
+                0 0 40px var(--mystical-glow),
+                inset 0 0 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .title-frame::before,
+        .title-frame::after {
+            content: '◆';
+            position: absolute;
+            font-size: 2rem;
+            color: var(--flame-gold);
+        }
+
+        .title-frame::before {
+            top: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .title-frame::after {
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 900;
+            color: var(--flame-gold);
+            text-shadow:
+                0 0 20px var(--ember-orange),
+                0 0 40px var(--sacred-red),
+                3px 3px 10px rgba(0, 0, 0, 0.8);
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            animation: flameGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes flameGlow {
+            0%, 100% {
+                text-shadow:
+                    0 0 20px var(--ember-orange),
+                    0 0 40px var(--sacred-red),
+                    3px 3px 10px rgba(0, 0, 0, 0.8);
+            }
+            50% {
+                text-shadow:
+                    0 0 30px var(--ember-orange),
+                    0 0 60px var(--sacred-red),
+                    0 0 80px var(--flame-gold),
+                    3px 3px 10px rgba(0, 0, 0, 0.8);
+            }
+        }
+
+        .subtitle {
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 200;
+            letter-spacing: 0.3em;
+            color: var(--ancient-bronze);
+            margin-top: 1rem;
+        }
+
+        .quest-text {
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            max-width: 700px;
+            margin: 3rem auto;
+            line-height: 2;
+            font-weight: 400;
+            color: var(--parchment);
+            padding: 2rem;
+            background: rgba(139, 111, 71, 0.15);
+            border-left: 3px solid var(--flame-gold);
+            border-right: 3px solid var(--flame-gold);
+            animation: fadeIn 1.5s ease-out 0.5s backwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* メニューセクション */
+        .menu-section {
+            padding: 6rem 2rem;
+            background:
+                linear-gradient(180deg, transparent 0%, rgba(139, 111, 71, 0.1) 50%, transparent 100%);
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 4rem;
+            color: var(--flame-gold);
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+            letter-spacing: 0.15em;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--flame-gold), transparent);
+            margin: 1rem auto;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .menu-card {
+            background: linear-gradient(135deg, rgba(26, 15, 10, 0.8), rgba(45, 24, 16, 0.9));
+            border: 2px solid var(--ancient-bronze);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--mystical-glow) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            border-color: var(--flame-gold);
+            box-shadow:
+                0 10px 40px rgba(255, 167, 38, 0.4),
+                0 0 60px rgba(255, 111, 0, 0.3);
+        }
+
+        .menu-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--flame-gold);
+        }
+
+        .card-corner.top-left {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .card-corner.top-right {
+            top: 10px;
+            right: 10px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .card-corner.bottom-left {
+            bottom: 10px;
+            left: 10px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .card-corner.bottom-right {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .menu-card h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--flame-gold);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .rarity {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .legendary { color: #ffeb3b; text-shadow: 0 0 10px #ffeb3b; }
+        .epic { color: #9c27b0; text-shadow: 0 0 10px #9c27b0; }
+        .rare { color: #2196f3; text-shadow: 0 0 10px #2196f3; }
+
+        .description {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--parchment);
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat {
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--ancient-bronze);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            color: var(--flame-gold);
+        }
+
+        /* ストーリーセクション */
+        .story-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, rgba(26, 15, 10, 0.5), rgba(45, 24, 16, 0.5));
+        }
+
+        .story-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem;
+            background: rgba(26, 15, 10, 0.7);
+            border: 3px double var(--ancient-bronze);
+            position: relative;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .story-content::before {
+            content: '◈';
+            position: absolute;
+            top: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: var(--flame-gold);
+            background: var(--charcoal-black);
+            padding: 0 1rem;
+        }
+
+        .story-content p {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.3rem;
+            line-height: 2.2;
+            margin-bottom: 2rem;
+            color: var(--parchment);
+        }
+
+        .story-content p:first-of-type::first-letter {
+            font-size: 4rem;
+            font-weight: 700;
+            float: left;
+            line-height: 1;
+            margin: 0.1rem 0.5rem 0 0;
+            color: var(--flame-gold);
+            font-family: 'Cinzel', serif;
+        }
+
+        /* ロケーションセクション */
+        .location-section {
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .location-card {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(26, 15, 10, 0.9), rgba(45, 24, 16, 0.95));
+            border: 3px solid var(--flame-gold);
+            box-shadow: 0 0 50px var(--mystical-glow);
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .location-info {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 1.2rem;
+            line-height: 2.5;
+            color: var(--parchment);
+        }
+
+        .location-info strong {
+            color: var(--flame-gold);
+            font-weight: 700;
+        }
+
+        .cta-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1.5rem 4rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--charcoal-black);
+            background: linear-gradient(135deg, var(--flame-gold), var(--ember-orange));
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 167, 38, 0.5);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(255, 167, 38, 0.7);
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        /* フッター */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 2px solid var(--ancient-bronze);
+            background: rgba(26, 15, 10, 0.8);
+        }
+
+        footer p {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1rem;
+            color: var(--ancient-bronze);
+            letter-spacing: 0.2em;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .title-frame {
+                padding: 2rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .story-content {
+                padding: 2rem;
+            }
+        }
+
+        /* スクロールアニメーション */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヒーローセクション -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="title-frame">
+                    <h1>焼鳥ノ伝説</h1>
+                    <p class="subtitle">LEGENDARY YAKITORI QUEST</p>
+                </div>
+                <p class="quest-text">
+                    古より伝わりし炎の技、秘伝のタレ、そして選ばれし串。<br>
+                    ここは冒険者たちが集う、伝説の焼鳥ギルド。<br>
+                    汝の舌が求める至高の味覚クエストが、今始まる。
+                </p>
+            </div>
+        </section>
+
+        <!-- メニューセクション -->
+        <section class="menu-section scroll-reveal">
+            <h2 class="section-title">伝説ノ串</h2>
+            <div class="menu-grid">
+                <!-- レジェンダリー: ねぎま -->
+                <div class="menu-card">
+                    <div class="card-corner top-left"></div>
+                    <div class="card-corner top-right"></div>
+                    <div class="card-corner bottom-left"></div>
+                    <div class="card-corner bottom-right"></div>
+                    <div class="rarity legendary">★ LEGENDARY ★</div>
+                    <h3>炎帝のねぎま</h3>
+                    <p class="description">
+                        炎の守護神に捧げられし、至高の逸品。
+                        極上の鶏もも肉と神秘の葱が織りなす、
+                        究極のハーモニー。
+                    </p>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-label">FLAVOR</div>
+                            <div class="stat-value">★★★★★</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">PRICE</div>
+                            <div class="stat-value">280G</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- エピック: つくね -->
+                <div class="menu-card">
+                    <div class="card-corner top-left"></div>
+                    <div class="card-corner top-right"></div>
+                    <div class="card-corner bottom-left"></div>
+                    <div class="card-corner bottom-right"></div>
+                    <div class="rarity epic">◆ EPIC ◆</div>
+                    <h3>月光のつくね</h3>
+                    <p class="description">
+                        満月の夜にのみ作られる神秘の肉団子。
+                        ふわふわの食感と濃厚な旨味が、
+                        冒険者の魂を癒やす。
+                    </p>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-label">FLAVOR</div>
+                            <div class="stat-value">★★★★☆</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">PRICE</div>
+                            <div class="stat-value">250G</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- レア: レバー -->
+                <div class="menu-card">
+                    <div class="card-corner top-left"></div>
+                    <div class="card-corner top-right"></div>
+                    <div class="card-corner bottom-left"></div>
+                    <div class="card-corner bottom-right"></div>
+                    <div class="rarity rare">◇ RARE ◇</div>
+                    <h3>深淵のレバー</h3>
+                    <p class="description">
+                        深き森の奥で育まれし、鉄分豊富な宝物。
+                        クリーミーな口当たりと深いコクが、
+                        冒険者のスタミナを回復させる。
+                    </p>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-label">FLAVOR</div>
+                            <div class="stat-value">★★★★☆</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">PRICE</div>
+                            <div class="stat-value">220G</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- エピック: 砂肝 -->
+                <div class="menu-card">
+                    <div class="card-corner top-left"></div>
+                    <div class="card-corner top-right"></div>
+                    <div class="card-corner bottom-left"></div>
+                    <div class="card-corner bottom-right"></div>
+                    <div class="rarity epic">◆ EPIC ◆</div>
+                    <h3>戦士の砂肝</h3>
+                    <p class="description">
+                        コリコリとした食感が戦士の心を奮い立たせる。
+                        噛むほどに溢れる旨味は、
+                        まさに勝利の味わい。
+                    </p>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-label">FLAVOR</div>
+                            <div class="stat-value">★★★★☆</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">PRICE</div>
+                            <div class="stat-value">230G</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- レジェンダリー: 手羽先 -->
+                <div class="menu-card">
+                    <div class="card-corner top-left"></div>
+                    <div class="card-corner top-right"></div>
+                    <div class="card-corner bottom-left"></div>
+                    <div class="card-corner bottom-right"></div>
+                    <div class="rarity legendary">★ LEGENDARY ★</div>
+                    <h3>天空の手羽先</h3>
+                    <p class="description">
+                        パリッと焼き上げられた黄金の翼。
+                        一口齧れば、ジューシーな肉汁が溢れ出し、
+                        天空へと導かれる至福の時。
+                    </p>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-label">FLAVOR</div>
+                            <div class="stat-value">★★★★★</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">PRICE</div>
+                            <div class="stat-value">300G</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- レア: ししとう -->
+                <div class="menu-card">
+                    <div class="card-corner top-left"></div>
+                    <div class="card-corner top-right"></div>
+                    <div class="card-corner bottom-left"></div>
+                    <div class="card-corner bottom-right"></div>
+                    <div class="rarity rare">◇ RARE ◇</div>
+                    <h3>賢者のししとう</h3>
+                    <p class="description">
+                        時折訪れる辛さの試練。
+                        それを乗り越えた者には、
+                        爽やかな風味という報酬が与えられる。
+                    </p>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-label">FLAVOR</div>
+                            <div class="stat-value">★★★☆☆</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">PRICE</div>
+                            <div class="stat-value">180G</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ストーリーセクション -->
+        <section class="story-section scroll-reveal">
+            <h2 class="section-title">職人ノ物語</h2>
+            <div class="story-content">
+                <p>
+                    遥か昔、炎の神より授かりし「究極の串打ち」の技。
+                    代々受け継がれし秘伝のタレは、百種の香辛料と時の流れが生み出した奇跡の調合。
+                </p>
+                <p>
+                    我らが親方は、修行の旅で七つの大陸を巡り、
+                    伝説の焼き鳥マスターより直々に炎の扱い方を学びし者。
+                    その手から生み出される一本一本の串は、まさに芸術品。
+                </p>
+                <p>
+                    備長炭が奏でる炎の舞、香ばしき煙の調べ。
+                    ここは単なる焼き鳥屋にあらず——
+                    味覚の冒険が始まる、伝説のギルドなり。
+                </p>
+            </div>
+        </section>
+
+        <!-- ロケーションセクション -->
+        <section class="location-section scroll-reveal">
+            <h2 class="section-title">ギルドの在処</h2>
+            <div class="location-card">
+                <div class="location-info">
+                    <p><strong>所在地:</strong> 東京都渋谷区神秘町1-2-3</p>
+                    <p><strong>営業時間:</strong> 17:00 - 24:00</p>
+                    <p><strong>定休日:</strong> 日曜日（月の満ち欠けにより変動）</p>
+                    <p><strong>予約:</strong> 03-XXXX-XXXX</p>
+                </div>
+                <a href="#" class="cta-button">クエスト開始</a>
+            </div>
+        </section>
+
+        <!-- フッター -->
+        <footer>
+            <p>© 2025 焼鳥ノ伝説 - All Rights Reserved</p>
+        </footer>
+    </div>
+
+    <script>
+        // スクロールアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach((element) => {
+            observer.observe(element);
+        });
+
+        // メニューカードの追加アニメーション
+        const menuCards = document.querySelectorAll('.menu-card');
+        menuCards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+    </script>
+</body>
+</html>
